@@ -13,9 +13,11 @@ conan_basic_setup()
 
 add_executable(lexer 
     src/main.cpp
-    src/lexercore.cpp   src/lexercore.hpp
-    src/lexer.cpp       src/lexer.hpp
-    src/token.cpp       src/token.hpp
+    src/lexercore.cpp       src/lexercore.hpp
+    src/lexer.cpp           src/lexer.hpp
+    src/token.cpp           src/token.hpp
+    src/util/color.cpp      src/util/color.hpp
+    src/util/string.cpp     src/util/string.hpp
     )
 target_precompiled_header(lexer src/precompile.hpp)
     
