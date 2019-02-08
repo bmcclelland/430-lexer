@@ -24,6 +24,12 @@ char LexerCore::cur() const {
     }
 }
 
+char LexerCore::get() {
+    auto c = cur();
+    next();
+    return c;
+}
+
 void LexerCore::next() {
     if (!eof()) {
         ++_input_pos;

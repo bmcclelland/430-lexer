@@ -8,9 +8,7 @@ using namespace std;
 int app(String const& input) {
     cout << "input: " << input << "\n";
 
-    Lexer lexer(input);
-
-    if (LexerResult result = lexer.run()) {
+    if (LexerResult result = lex(input)) {
         for (Token const& t : result.value()) {
             cout << to_fancy_string(t);
         }

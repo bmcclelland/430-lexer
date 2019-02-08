@@ -2,20 +2,28 @@
 #include "map.hpp"
 
 namespace lexer {
-   
-static
-Optional<Token> try_reserved(String const& key) {
-    static const Map<String, Token> keywords {
-        { "if", TokenIf() },
-        { "else", TokenElse() },
-    };
 
-    return lookup(keywords, key);
+static 
+const Map<String, Token> keywords {
+    { "if",   TokenIf() },
+    { "else", TokenElse() },
+};
+
+char escape(char c) {
+    switch (c) {
+        case 'n': return '\n';
+        default: return c;
+    }
 }
 
-Lexer::Lexer(String const& input) 
-    : LexerCore(input)
-{}
+class Lexer : private LexerCore {
+    public:
+        explicit Lexer(String const& input)
+            : LexerCore(input)
+        {}
+
+        LexerResult run();
+};
 
 LexerResult Lexer::run() {
     Vector<Token> tokens;
@@ -43,12 +51,11 @@ LexerResult Lexer::run() {
         }
 
         do {
-            value.push_back(cur());
-            next();
+            value.push_back(get());
         } 
         while (isalpha(cur()) || isdigit(cur()));
 
-        if (Optional<Token> keyword = try_reserved(value)) {
+        if (Optional<Token> keyword = lookup(keywords, value)) {
             return keyword;
         }
     
@@ -63,8 +70,7 @@ LexerResult Lexer::run() {
         }
 
         do {
-            s.push_back(cur());
-            next();
+            s.push_back(get());
         } 
         while (isdigit(cur()));
 
@@ -76,29 +82,44 @@ LexerResult Lexer::run() {
         }
     };
 
-    auto lpar = [&]() -> Optional<Token> {
-        if (cur() != '(') {
+    auto str = [&]() -> Optional<Token> {
+        if (get() != '"') {
             return failure;
         }
 
+        String value;
+        char c = get();
+
+        while (c != '"') {
+            if (c == '\\') {
+                c = get();
+                value += escape(c);
+            }
+            else {
+                value += c;
+            }
+
+            c = get();
+        }
+ 
         next();
-        return TokenLPar{};
+        return TokenStr(value);
     };
-    
-    auto rpar = [&]() -> Optional<Token> {
-        if (cur() != ')') {
-            return failure;
-        }
 
-        next();
-        return TokenRPar{};
+    auto single = [&]() -> Optional<Token> {
+        switch (get()) {
+            case '(': return TokenLPar();
+            case ')': return TokenRPar();
+            case ',': return TokenComma();
+            default: return failure;
+        }
     };
 
     while (!eof()) {
         if (t(name_or_keyword)
          || t(num)
-         || t(lpar)
-         || t(rpar)
+         || t(str)
+         || t(single)
          ) {
             // Ok.
         }
@@ -108,6 +129,11 @@ LexerResult Lexer::run() {
     }
 
     return tokens;
+}
+
+LexerResult lex(String const& input) {
+    Lexer l(input);
+    return l.run();
 }
 
 } // namespace lexer

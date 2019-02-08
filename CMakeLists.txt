@@ -22,7 +22,10 @@ add_executable(lexer
     )
 target_precompiled_header(lexer src/precompile.hpp)
     
-target_link_libraries(lexer ${CONAN_LIBS})
+target_link_libraries(lexer 
+    "-lgcov"
+    ${CONAN_LIBS}
+    )
 target_include_directories(lexer
     PRIVATE 
         ${CMAKE_CURRENT_SOURCE_DIR}/src
@@ -83,5 +86,7 @@ else()
             -Wnull-dereference
             -Wdouble-promotion
             -Wformat=2
+            -fprofile-arcs 
+            -ftest-coverage
     )
 endif()

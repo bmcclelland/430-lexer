@@ -11,6 +11,9 @@ String to_string(Token const& t) {
         [](TokenRPar) { 
             return "(RPar)"s; 
         },
+        [](TokenComma) { 
+            return "(Comma)"s; 
+        },
         [](TokenIf)   { 
             return "(If)"s; 
         },
@@ -22,6 +25,9 @@ String to_string(Token const& t) {
         },
         [](TokenNum const& num) {
             return "(Num " + to_string(num.value) + ")";
+        },
+        [](TokenStr const& str) {
+            return "(Str " + str.value + ")";
         });
 }
 
@@ -29,15 +35,17 @@ static
 Color token_color(Token const& t) {
     constexpr auto col_op   = Color::yellow;
     constexpr auto col_name = Color::cyan;
-    constexpr auto col_num  = Color::red;
+    constexpr auto col_lit  = Color::red;
     
     return t.match(
-        [](TokenLPar) { return col_op; },
-        [](TokenRPar) { return col_op; },
-        [](TokenIf)   { return col_op; },
-        [](TokenElse) { return col_op; },
-        [](TokenName) { return col_name; },
-        [](TokenNum)  { return col_num; }
+        [](TokenLPar)  { return col_op; },
+        [](TokenRPar)  { return col_op; },
+        [](TokenComma) { return col_op; },
+        [](TokenIf)    { return col_op; },
+        [](TokenElse)  { return col_op; },
+        [](TokenName)  { return col_name; },
+        [](TokenNum)   { return col_lit; },
+        [](TokenStr)   { return col_lit; }
         );
 }
 

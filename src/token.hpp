@@ -7,6 +7,7 @@ namespace lexer {
 
 struct TokenLPar {};
 struct TokenRPar {};
+struct TokenComma {};
 struct TokenIf {};
 struct TokenElse {};
 
@@ -26,13 +27,23 @@ struct TokenNum {
     {} 
 };
 
+struct TokenStr {
+    String value;
+
+    explicit TokenStr(String const& value_)
+        : value(value_)
+    {}
+};
+
 using Token = Variant<
     TokenLPar, 
     TokenRPar, 
+    TokenComma,
+    TokenIf,
+    TokenElse,
     TokenName, 
     TokenNum,
-    TokenIf,
-    TokenElse
+    TokenStr
 >;
 
 String to_string(Token const&);

@@ -28,6 +28,7 @@ class LexerCore {
         bool eof() const;
         size_t pos() const;
         char cur() const;
+        char get();
         void next();
         void skip_ws();
 

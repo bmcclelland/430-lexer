@@ -2,7 +2,6 @@
 
 #include "token.hpp"
 #include "lexercore.hpp"
-#include "variant.hpp"
 #include "result.hpp"
 
 namespace lexer {
@@ -14,10 +13,6 @@ struct LexerError {
 
 using LexerResult = Result<Vector<Token>, LexerError>;
 
-class Lexer : private LexerCore {
-    public:
-        explicit Lexer(String const&);
-        LexerResult run();
-};
+LexerResult lex(String const&);
 
 } // namespace lexer
