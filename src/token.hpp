@@ -36,5 +36,6 @@ using Token = Variant<
 >;
 
 String to_string(Token const&);
+String to_fancy_string(Token const&);
 
 } // namespace lexer

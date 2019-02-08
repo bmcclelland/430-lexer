@@ -3,32 +3,48 @@
 
 namespace lexer {
 
-static String const col_op   = to_string(Color::yellow);
-static String const col_name = to_string(Color::cyan);
-static String const col_kw   = to_string(Color::yellow);
-static String const col_num  = to_string(Color::red);
-static String const col_off  = to_string(Color::off);
-
 String to_string(Token const& t) {
     return t.match(
         [](TokenLPar) { 
-            return col_op + "(LPar)" + col_off; 
+            return "(LPar)"s; 
         },
         [](TokenRPar) { 
-            return col_op + "(RPar)" + col_off; 
+            return "(RPar)"s; 
         },
         [](TokenIf)   { 
-            return col_kw + "(If)" + col_off; 
+            return "(If)"s; 
         },
         [](TokenElse) { 
-            return col_kw + "(Else)" + col_off; 
+            return "(Else)"s; 
         },
         [](TokenName const& name) {
-            return col_name + "(Name " + name.value + ")" + col_off;
+            return "(Name " + name.value + ")";
         },
         [](TokenNum const& num) {
-            return col_num + "(Num " + to_string(num.value) + ")" + col_off;
+            return "(Num " + to_string(num.value) + ")";
         });
+}
+
+static
+Color token_color(Token const& t) {
+    constexpr auto col_op   = Color::yellow;
+    constexpr auto col_name = Color::cyan;
+    constexpr auto col_num  = Color::red;
+    
+    return t.match(
+        [](TokenLPar) { return col_op; },
+        [](TokenRPar) { return col_op; },
+        [](TokenIf)   { return col_op; },
+        [](TokenElse) { return col_op; },
+        [](TokenName) { return col_name; },
+        [](TokenNum)  { return col_num; }
+        );
+}
+
+String to_fancy_string(Token const& t) {
+    return to_string(token_color(t)) 
+         + to_string(t) 
+         + to_string(Color::off);
 }
 
 } // namespace lexer

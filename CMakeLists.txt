@@ -13,6 +13,7 @@ conan_basic_setup()
 
 add_executable(lexer 
     src/main.cpp
+    src/app.cpp             src/app.hpp
     src/lexercore.cpp       src/lexercore.hpp
     src/lexer.cpp           src/lexer.hpp
     src/token.cpp           src/token.hpp
