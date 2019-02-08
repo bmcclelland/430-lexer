@@ -13,7 +13,7 @@ struct TokenElse {};
 struct TokenName { 
     String value; 
 
-    TokenName(String const& value_)
+    explicit TokenName(String const& value_)
         : value(value_)
     {}
 };
@@ -21,7 +21,7 @@ struct TokenName {
 struct TokenNum { 
     int value; 
    
-    TokenNum(int value_) 
+    explicit TokenNum(int value_) 
         : value(value_) 
     {} 
 };

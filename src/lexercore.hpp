@@ -23,7 +23,7 @@ class LexerCore {
     friend class PosReverter;
 
     public:
-        LexerCore(String const&);
+        explicit LexerCore(String const&);
     
         bool eof() const;
         size_t pos() const;

@@ -16,7 +16,7 @@ using LexerResult = Result<Vector<Token>, LexerError>;
 
 class Lexer : private LexerCore {
     public:
-        Lexer(String const&);
+        explicit Lexer(String const&);
         LexerResult run();
 };
 
