@@ -1,0 +1,6 @@
+[requires]
+boost/1.69.0@conan/stable
+gsl_microsoft/2.0.0@bincrafters/stable
+
+[generators]
+cmake
