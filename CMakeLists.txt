@@ -7,9 +7,6 @@ set(CMAKE_CXX_STANDARD 17)
 project(lexer CXX CXXPCH)
 
 add_definitions("-std=c++17")
-include(${CMAKE_BINARY_DIR}/conanbuildinfo.cmake)
-set(CONAN_SYSTEM_INCLUDES ON)
-conan_basic_setup()
 
 add_executable(lexer 
     src/main.cpp
@@ -23,9 +20,8 @@ add_executable(lexer
 target_precompiled_header(lexer src/precompile.hpp)
     
 target_link_libraries(lexer 
-    "-lgcov"
-    ${CONAN_LIBS}
     )
+
 target_include_directories(lexer
     PRIVATE 
         ${CMAKE_CURRENT_SOURCE_DIR}/src
@@ -86,7 +82,5 @@ else()
             -Wnull-dereference
             -Wdouble-promotion
             -Wformat=2
-            -fprofile-arcs 
-            -ftest-coverage
     )
 endif()
