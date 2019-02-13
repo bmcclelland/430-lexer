@@ -1,5 +1,4 @@
 #include "string.hpp"
-#include <boost/locale.hpp>
 
 namespace lexer {
 

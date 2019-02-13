@@ -1,12 +1,9 @@
 cmake_minimum_required(VERSION 3.9)
 
-list(APPEND CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake/CMakePCHCompiler)
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 set(CMAKE_CXX_STANDARD 17)
 
-project(lexer CXX CXXPCH)
-
-add_definitions("-std=c++17")
+project(lexer CXX)
 
 add_executable(lexer 
     src/main.cpp
@@ -17,7 +14,6 @@ add_executable(lexer
     src/util/color.cpp      src/util/color.hpp
     src/util/string.cpp     src/util/string.hpp
     )
-target_precompiled_header(lexer src/precompile.hpp)
     
 target_link_libraries(lexer 
     )
@@ -30,7 +26,44 @@ target_include_directories(lexer
         ${CMAKE_CURRENT_SOURCE_DIR}/external
     )
 
-if (MSVC)
+if ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
+    target_compile_options(lexer
+        PUBLIC
+            -Wall 
+            -Wextra 
+            -Werror=return-type
+            -Werror=switch
+        
+            -Werror
+            -Wshadow
+    )
+elseif ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU")
+    target_compile_options(lexer
+        PUBLIC
+            -Wall 
+            -Wextra 
+            -Werror=return-type
+            -Werror=switch
+            -Wfatal-errors
+        
+            -Werror
+            -Wshadow
+            -Wnon-virtual-dtor
+            -Wold-style-cast
+            -Wcast-align
+            -Wunused
+            -Woverloaded-virtual
+            -Wpedantic
+            -Wconversion
+            -Wsign-conversion
+            -Wmisleading-indentation
+            -Wduplicated-cond
+            -Wlogical-op
+            -Wnull-dereference
+            -Wdouble-promotion
+            -Wformat=2
+    )
+elseif ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "MSVC")
     target_compile_options(lexer
         PUBLIC     
             /permissive
@@ -57,30 +90,4 @@ if (MSVC)
     )
     source_group("src"           REGULAR_EXPRESSION "src/.*")
     source_group("src\\util"     REGULAR_EXPRESSION "src/util/.*")
-else()
-    target_compile_options(lexer
-        PUBLIC
-            -Wall 
-            -Wextra 
-            -Werror=return-type
-            -Werror=switch
-            -Wfatal-errors
-        
-            -Werror
-            -Wshadow
-            -Wnon-virtual-dtor
-            -Wold-style-cast
-            -Wcast-align
-            -Wunused
-            -Woverloaded-virtual
-            -Wpedantic
-            -Wconversion
-            -Wsign-conversion
-            -Wmisleading-indentation
-            -Wduplicated-cond
-            -Wlogical-op
-            -Wnull-dereference
-            -Wdouble-promotion
-            -Wformat=2
-    )
 endif()
